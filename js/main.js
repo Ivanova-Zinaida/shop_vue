@@ -21,8 +21,9 @@ const store = new Vuex.Store({
     },
     mutations:{
         addToCart(state, item){
-            state.cart.push(item);
+            state.cart.push(item);     
         },
+        
         removeFromCart(state, item) {
             let index = state.cart.indexOf(item);
 
@@ -31,13 +32,16 @@ const store = new Vuex.Store({
                 state.cart.splice(index, 1);
             }
         },
-
+        
         addProducts(state, arrProducts){
             for(let i = 0; i < arrProducts.length; i++){
                 state.products.push(arrProducts[i]);
             }
         },
-
+        deletCart(state){
+              state.cart.splice(0, state.cart.length);
+                 alert('Ваш заказ оформлен');
+        }
     },
     actions:{
         loadData({commit}){
@@ -47,7 +51,6 @@ const store = new Vuex.Store({
 });
             
 store.dispatch('loadData');
-
 
 Vue.component('v-header', {
       template: `
@@ -80,6 +83,56 @@ Vue.component('v-header', {
         },
  
     });
+Vue.component('v-footer',{
+    template:`
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__wrapper">
+                <div class="social">
+                    <a href="#" class="footer__logo">ModaX</a>
+                    <ul class="social__list">
+                        <li class="social__item"><a href="" class="social__link"><span class="soccial__icon"><i class="fab fa-facebook-f"></i></span></a></li>
+                        <li class="social__item"><a href="" class="social__link"><span class="soccial__icon"><i class="fab fa-twitter"></i></span></a></li>
+                        <li class="social__item"><a href="" class="social__link"><span class="soccial__icon"><i class="fab fa-behance"></i></span></a></li>
+                        <li class="social__item"><a href="" class="social__link"><span class="soccial__icon"><i class="fa fa-globe"></i></span></a></li>
+                        <li class="social__item"><a href="" class="social__link"><span class="soccial__icon"><i class="fab fa-linkedin-in"></i></span></a></li>
+                    </ul>
+                </div>
+                <div class="footer__nav">
+                    <ul class="menu__list footer__list">
+                        <li class="menu__item footer__item"><a href="" class="menu__link footer__link">man</a></li>
+                        <li class="menu__item footer__item"><a href="" class="menu__link footer__link">woman</a></li>
+                        <li class="menu__item footer__item"><a href="" class="menu__link footer__link">lookbook</a></li>
+                        <li class="menu__item footer__item"><a href="" class="menu__link footer__link">sale</a></li>
+                        <li class="menu__item footer__item"><a href="" class="menu__link footer__link">blog</a></li>
+                    </ul>
+                    <form action="" class="footer__form">
+                        <label for="footer__email" class="footer__form-label">Subscribe to news</label>
+                        <input type="email" class="email" id="footer__email" placeholder="Email Adrress">
+                        <input type="submit" class="submit" value="Submit">
+                    </form>
+                </div>
+                <div class="footer__contacts">
+                    <h4 class="footer__contacts_head">
+                        contact us
+                    </h4>
+                    <div class="footer__adress">San Francisco, California  400 Castro St, San Francisco, CA <span class="footer__adress_tel">
+                        (+1) 686 868 9999
+                    </span></div>
+                    <ul class="payment__list">
+                        <li class="payment__item"><a href="#" class="payment__link"><img src="image/footer/card-pay_1.png" alt="оплата карточкой"></a></li>
+                        <li class="payment__item"><a href="#" class="payment__link"><img src="image/footer/card-pay_2.png" alt="оплата карточкой"></a></li>
+                        <li class="payment__item"><a href="#" class="payment__link"><img src="image/footer/card-pay_3.png" alt="оплата карточкой"></a></li>
+                        <li class="payment__item"><a href="#" class="payment__link"><img src="image/footer/card-pay_4.png" alt="оплата карточкой"></a></li>
+                        <li class="payment__item"><a href="#" class="payment__link"><img src="image/footer/card-pay_5.png" alt="оплата карточкой"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+`,
+
+});
 
 const Card = {
     template:`
@@ -173,7 +226,6 @@ const Product = {
     
 };
 
-
 const DetailsProd = {
     
     template: `
@@ -203,8 +255,8 @@ const DetailsProd = {
                       </div>
                       <div class="form__btn_block">
                           <div>
-                                <span v-if=(product.sale) class="form__prise">{{product.salePrice }}<span class="form__prise_small">{{product.price }}</span></span>
-                                <span v-else class="form__prise">{{product.price }}</span>
+                                <span v-if=(product.sale) class="form__prise">{{product.salePrice }}<span class="form__prise_small">$ {{product.price }} USD</span></span>
+                                <span v-else class="form__prise">$ {{product.price }} USD</span>
                          </div>
                           
                           <div class="btn__inner">
@@ -250,6 +302,7 @@ const Basket = {
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Количество</th>
                             <th>Название</th>
                             <th>Картинка</th> 
                             <th>Цена</th>
@@ -258,20 +311,21 @@ const Basket = {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr  v-for="(product, index) in cart"  :key="index">
+                        <tr  v-for="(product, index) in basketArr"  :key="index">
                             <td>{{product.id}} </td>
+                            <td>{{product.num}} </td>
                             <td>{{product.title}} </td>
                             <td><img :src='product.img'/> </td>
                             <td>
-                                <span v-if='(product.sale)'>{{ product.salePrice}}</span>
-                                <span v-else>{{ product.price}}</span>
+                                $ {{ product.totalPrice }} USD
+
                             </td>
                             <td><a href="#" @click.prevent='addToCart(product)'>Добавить</a></td>
                             <td><a href="#" @click.prevent='removeFromCart(product)'>Удалить</a></td>
                         </tr>
                     </tbody>
                 </table>
-                <p>Всего товаров: {{ cartItemCount }}  <span class='price-table' >Цена: {{totalPrice}}</span> <a class='btn' @click='toOder'>Заказать</a></p>
+                <p>Всего товаров: {{ cartItemCount }}  <span class='price-table' >Цена: {{totalPrice}}</span> <a class='btn' @click='deletCart'>Заказать</a></p>
 
             </div>
             <div class='container' v-else> <h3>корзина пуста</h3></div>
@@ -283,17 +337,37 @@ const Basket = {
          ...Vuex.mapGetters(['cartItemCount']),
         totalPrice: function(){
             let total = 0;
-            for (let item of this.$store.state.cart) {
+            for(let item of this.$store.state.cart) {
                if(item.sale){
                     total += item.salePrice;
                 }else if(item.sale==false){
                     total += item.price;
-                }           
-                
+                }                       
             }
 
             return total.toFixed(2);
         },
+        basketArr: function(){
+            let arr = [];
+               for(let item of this.$store.state.cart){
+               let found = arr.find(arr => arr.id == item.id);
+                
+                if ( found ) {
+                    item.num = item.num + 1 ;
+                    item.totalPrice = item.num * item.price;
+                    } else {
+                    if(item.sale){
+                        item.price = item.salePrice
+                    }
+                    item.num = 1;
+                    item.totalPrice = item.price ;
+                    arr.push(item);
+
+                }  
+               }
+            return arr;
+
+        }
 
     },
     methods:{
@@ -304,7 +378,10 @@ const Basket = {
             this.$store.commit('removeFromCart', item);
         },
         toOder: function(){
-            alert('Ваш заказ оформлен')
+            alert('Ваш заказ оформлен');
+        },
+        deletCart: function(){
+             this.$store.commit('deletCart');
         }
 
  
@@ -348,13 +425,9 @@ const app = new Vue({
     store,
     
     components:{
-       'shop': Product ,
+        'shop': Product,
         'detailsProd':DetailsProd,
         'basket':Basket
-    },
-    data:{
-        menu:0
-      
     },
     computed:{
        ...Vuex.mapState(['sitename', 'basket','sechProduct']), 
