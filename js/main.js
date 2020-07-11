@@ -3,6 +3,8 @@ const store = new Vuex.Store({
             sitename: `Be.Pro`,
             cart: [],
             products: [],
+            cartItemCount:0,
+            totalPrice:0,
         basket:{
             img:'image/menu-search/menu-cart.png',
             alt:'корзина покупок',
@@ -14,22 +16,42 @@ const store = new Vuex.Store({
         },
                     
     },
-    getters: {
-        cartItemCount(state){
-            return state.cart.length;
-        },
-    },
     mutations:{
-        addToCart(state, item){
-            state.cart.push(item);     
+        addToCart(state, product){
+            let item = JSON.parse(JSON.stringify(product));
+            let found = state.cart.find(product => product.id == item.id);
+            
+            if ( found ) {
+                found.num = found.num + 1 ;
+                found.totalPrice = found.num * found.price;
+                state.totalPrice += found.price;
+            } else {
+                if(item.sale){
+                    item.price  = item.salePrice
+                }
+                item.num = 1;
+                item.totalPrice = item.price ;
+                state.totalPrice += item.price;
+                state.cart.push(item); 
+                }  
+            state.cartItemCount ++; 
+           
         },
         
         removeFromCart(state, item) {
             let index = state.cart.indexOf(item);
 
-            if (index > -1) {
-                let product = state.cart[index];
-                state.cart.splice(index, 1);
+            if (index > - 1) {
+
+                if(item.num > 1){
+                    item.num = item.num - 1;
+                    item.totalPrice = item.num * item.price;
+                    state.totalPrice -= item.price;
+                } else{
+                    state.totalPrice -= item.price;
+                    state.cart.splice(index, 1);
+                }
+                state.cartItemCount --;
             }
         },
         
@@ -40,7 +62,8 @@ const store = new Vuex.Store({
         },
         deletCart(state){
               state.cart.splice(0, state.cart.length);
-                 alert('Ваш заказ оформлен');
+              state.cartItemCount = 0;
+              alert('Ваш заказ оформлен');
         }
     },
     actions:{
@@ -62,7 +85,7 @@ Vue.component('v-header', {
                                 <a href="#" class="logo header__logo">{{sitename}}</a>
                                 <ul class="menu__list">
                                     <li class="menu__item">
-                                        <router-link  :to="{ path: '/' }" exact class="menu__link">Shop</router-link>
+                                        <router-link  :to="{name:'shop'}" exact class="menu__link">Shop</router-link>
                                 </li>
                                 </ul>
                             </div>
@@ -77,9 +100,7 @@ Vue.component('v-header', {
                     </div>
                 </header>`,
         computed: {
-            ...Vuex.mapState(['sitename', 'basket','sechProduct']),
-            ...Vuex.mapGetters(['cartItemCount'])
-
+            ...Vuex.mapState(['sitename', 'basket','sechProduct','cartItemCount'])
         },
  
     });
@@ -140,7 +161,7 @@ const Card = {
             <span class="card__btn" v-if='item.sale'>sale</span>
             <div class="card__inner_top">
                 <a href="#" class="product__link" @click.prevent>
-                    <img :src="item.img" :alt="item.alt" class="card__img">
+                    <img :src="'/' + item.img" :alt="item.alt" class="card__img">
                 </a>   
             </div>
             <div class="card__inner_botton">
@@ -152,10 +173,13 @@ const Card = {
                     $ {{ item.price }} USD
                 </p>
             </div>
-            <p class='btn-card-wrap'>
+            <div class='btn-card-wrap'>
                 <router-link :to="{name:'detailsProd', params:{id:item.id}}" class='padinaten-btn'>Подробнее</router-link>
-                <button class="padinaten-btn" @click='addToCart(item)'>Добавить</button>
-            </p>
+                <div>
+                    <button class="padinaten-btn" v-if='(item.size!=0)' @click='addToCart(item)'>Добавить</button>
+                    <span v-else>Нет в наличие</span>
+                </div>
+            </div>
         </div>
         `,
     props:['item'],
@@ -256,18 +280,19 @@ const DetailsProd = {
                       <div class="form__btn_block">
                           <div>
                                 <span v-if=(product.sale) class="form__prise">{{product.salePrice }}<span class="form__prise_small">$ {{product.price }} USD</span></span>
-                                <span v-else class="form__prise">$ {{product.price }} USD</span>
+                                <span v-else class="form__prise">$ {{product.price }} USD </span>
                          </div>
                           
                           <div class="btn__inner">
-                              <button class="btn product__btn" @click='addToCart(product)'>Add To Cart</button>
+                              <span v-if='(product.size==0)'> Нет в наличие</span>
+                              <button class="btn product__btn" v-else @click='addToCart(product)'>Add To Cart</button>
                           </div> 
                       </div>
                 </div>
                      
                   <div class="">
 
-                       <img v-bind:src="product.img" alt="" class="datails-img">
+                       <img :src="'/' + product.img"  class="datails-img">
 
                   </div>  
               </div>
@@ -311,11 +336,11 @@ const Basket = {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr  v-for="(product, index) in basketArr"  :key="index">
+                        <tr  v-for="(product, index) in cart"  :key="index">
                             <td>{{product.id}} </td>
                             <td>{{product.num}} </td>
                             <td>{{product.title}} </td>
-                            <td><img :src='product.img'/> </td>
+                            <td><img :src="'/' + product.img" /> </td>
                             <td>
                                 $ {{ product.totalPrice }} USD
 
@@ -333,42 +358,7 @@ const Basket = {
     `,
  
     computed: {
-         ...Vuex.mapState(['products', 'cart']),
-         ...Vuex.mapGetters(['cartItemCount']),
-        totalPrice: function(){
-            let total = 0;
-            for(let item of this.$store.state.cart) {
-               if(item.sale){
-                    total += item.salePrice;
-                }else if(item.sale==false){
-                    total += item.price;
-                }                       
-            }
-
-            return total.toFixed(2);
-        },
-        basketArr: function(){
-            let arr = [];
-               for(let item of this.$store.state.cart){
-               let found = arr.find(arr => arr.id == item.id);
-                
-                if ( found ) {
-                    item.num = item.num + 1 ;
-                    item.totalPrice = item.num * item.price;
-                    } else {
-                    if(item.sale){
-                        item.price = item.salePrice
-                    }
-                    item.num = 1;
-                    item.totalPrice = item.price ;
-                    arr.push(item);
-
-                }  
-               }
-            return arr;
-
-        }
-
+         ...Vuex.mapState(['products', 'cart','cartItemCount', 'totalPrice'])
     },
     methods:{
         addToCart: function(product){
@@ -430,8 +420,6 @@ const app = new Vue({
         'basket':Basket
     },
     computed:{
-       ...Vuex.mapState(['sitename', 'basket','sechProduct']), 
-       ...Vuex.mapGetters(['cartItemCount'])
     },
 
 })

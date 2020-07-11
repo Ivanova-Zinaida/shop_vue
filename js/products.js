@@ -2,7 +2,7 @@ window.products=[
     {
         id:1,
         title:'Essential cotton-blend',
-        img:'../image/product/product-1.jpg',
+        img:'./image/product/product-1.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:200.00,
@@ -14,9 +14,9 @@ window.products=[
     {
         id:2,
         title:'Essential cotton',
-        img:'../image/product/product-2.jpg',
+        img:'./image/product/product-2.jpg',
         alt:'product',
-        size:['S','M', 'XL'],
+        size:[],
         price:175.00,
         sale:false,
         salePrice:0,
@@ -27,7 +27,7 @@ window.products=[
     {
         id:3,
         title:'Striped cotton t-shirt',
-        img:'../image/product/product-3.jpg',
+        img:'./image/product/product-3.jpg',
         alt:'product',
         size:['S'],
         price:200.00,
@@ -40,7 +40,7 @@ window.products=[
     {
         id:4,
         title:'Striped cotton t-shirt',
-        img:'../image/product/product-4.jpg',
+        img:'./image/product/product-4.jpg',
         alt:'product',
         size:[],
         price:100.00,
@@ -52,7 +52,7 @@ window.products=[
     {
         id:5,
         title:'Message cotton t-shirt',
-        img:'../image/product/product-6.jpg',
+        img:'./image/product/product-6.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:100.00,
@@ -64,7 +64,7 @@ window.products=[
    {
         id:6,
         title:' t-shirt',
-        img:'../image/product/product-7.jpg',
+        img:'./image/product/product-7.jpg',
         alt:'product',
         size:[ 'XL'],
         price:200.00,
@@ -76,7 +76,7 @@ window.products=[
     {
         id:7,
         title:'Ruffle sleeve t-shirt',
-        img:'../image/product/product-8.jpg',
+        img:'./image/product/product-8.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:100.00,
@@ -88,7 +88,7 @@ window.products=[
    {
         id:8,
         title:'Double layer top',
-        img:'../image/product/product-9.jpg',
+        img:'./image/product/product-9.jpg',
         alt:'product',
         size:[ 'S','XL'],
         price:200.00,
@@ -100,7 +100,7 @@ window.products=[
     {
         id:9,
         title:'Essential cotton-blend',
-        img:'image/product/product-1.jpg',
+        img:'./image/product/product-1.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:200.00,
@@ -112,7 +112,7 @@ window.products=[
     {
         id:10,
         title:'Essential cotton',
-        img:'../image/product/product-2.jpg',
+        img:'./image/product/product-2.jpg',
         alt:'product',
         size:['S','M', 'XL'],
         price:175.00,
@@ -125,7 +125,7 @@ window.products=[
     {
         id:11,
         title:'Striped cotton t-shirt',
-        img:'../image/product/product-3.jpg',
+        img:'./image/product/product-3.jpg',
         alt:'product',
         size:['S'],
         price:200.00,
@@ -138,7 +138,7 @@ window.products=[
     {
         id:12,
         title:'Striped cotton t-shirt',
-        img:'../image/product/product-4.jpg',
+        img:'./image/product/product-4.jpg',
         alt:'product',
         size:[],
         price:100.00,
@@ -150,7 +150,7 @@ window.products=[
     {
         id:13,
         title:'Message cotton t-shirt',
-        img:'../image/product/product-6.jpg',
+        img:'./image/product/product-6.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:100.00,
@@ -162,7 +162,7 @@ window.products=[
    {
         id:14,
         title:' t-shirt',
-        img:'../image/product/product-7.jpg',
+        img:'./image/product/product-7.jpg',
         alt:'product',
         size:[ 'XL'],
         price:200.00,
@@ -174,7 +174,7 @@ window.products=[
     {
         id:15,
         title:'Ruffle sleeve t-shirt',
-        img:'../image/product/product-8.jpg',
+        img:'./image/product/product-8.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:100.00,
@@ -186,7 +186,7 @@ window.products=[
    {
         id:16,
         title:'Double layer top',
-        img:'../image/product/product-9.jpg',
+        img:'./image/product/product-9.jpg',
         alt:'product',
         size:[ 'S','XL'],
         price:200.00,
@@ -198,7 +198,7 @@ window.products=[
     {
         id:17,
         title:'Ruffle sleeve t-shirt',
-        img:'../image/product/product-8.jpg',
+        img:'./image/product/product-8.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:100.00,
@@ -210,7 +210,7 @@ window.products=[
    {
         id:18,
         title:'Double layer top',
-        img:'../image/product/product-9.jpg',
+        img:'./image/product/product-9.jpg',
         alt:'product',
         size:[ 'S','XL'],
         price:200.00,
@@ -222,7 +222,7 @@ window.products=[
     {
         id:19,
         title:'Ruffle sleeve t-shirt',
-        img:'../image/product/product-8.jpg',
+        img:'./image/product/product-8.jpg',
         alt:'product',
         size:['S','M','L', 'XL'],
         price:100.00,
@@ -234,7 +234,7 @@ window.products=[
    {
         id:20,
         title:'Double layer top',
-        img:'../image/product/product-9.jpg',
+        img:'./image/product/product-9.jpg',
         alt:'product',
         size:[ 'S','XL'],
         price:200.00,
